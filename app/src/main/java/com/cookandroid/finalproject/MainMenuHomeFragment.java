@@ -194,6 +194,7 @@ public class MainMenuHomeFragment extends Fragment {
                             }
                         }, year, month, day);
                 datePickerDialog.show();
+                getView();
             }
         });
 
