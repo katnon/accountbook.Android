@@ -1,19 +1,25 @@
 package com.cookandroid.finalproject;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
+import java.io.BufferedWriter;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +44,8 @@ public class MainMenuReportFragment extends Fragment {
     TextView textDataAll;
     String[][] dataAll;
     ListView dataListView;
+
+    private String[][] myArray;
 
     public MainMenuReportFragment() {
         // Required empty public constructor
@@ -82,7 +90,67 @@ public class MainMenuReportFragment extends Fragment {
 
         dataListView = (ListView) getActivity().findViewById(R.id.dataListView);
 
-        return rootView;
+        Button deleteRowButton = (Button) rootView.findViewById(R.id.btnEditRow);
+        EditText editDelRow = (EditText) rootView.findViewById(R.id.editDelRow);
+        String str = editDelRow.getText().toString();
+        deleteRowButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String str = editDelRow.getText().toString();
+                try {
+                    Integer number = Integer.valueOf(str);
+                    System.out.println(number);
+
+                    // 여기에서 행을 삭제합니다.
+                    deleteRow(number);
+                    onStart();
+                    onResume();
+                } catch (NumberFormatException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+                    return rootView;
+
+    }
+
+    private void deleteRow(int row) {
+        String[][] newArray = new String[dataAll.length - 1][];
+        System.arraycopy(dataAll, 0, newArray, 0, row);
+        System.arraycopy(dataAll, row + 1, newArray, row, dataAll.length - row - 1);
+        dataAll = newArray;
+
+        try {
+            FileOutputStream outFs = requireContext().openFileOutput("file.txt", Context.MODE_PRIVATE);
+
+
+            String str = "";
+            //lineCount ++;
+            for (int j = 0 ; j < dataAll.length; j++) {
+                for (int i = 0; i < dataAll[j].length; i++) {
+                    str += dataAll[j][i];
+                    // 마지막 요소가 아닌 경우에만 쉼표를 추가합니다.
+                    if (i < dataAll[j].length - 1) {
+                        str += ",";
+                    }
+                    else{
+                        str += "\n";
+                    }
+                }
+                // 각 행을 새 줄에 씁니다.
+
+            }
+
+            //파일에 한 건당 한 줄씩 이어서 저장
+
+
+            outFs.write(str.getBytes());
+            outFs.close();
+
+            Toast.makeText(requireContext(), "삭제 내용이 적용되었습니다.", Toast.LENGTH_SHORT).show();
+        } catch (IOException e) {}
+
 
     }
 
@@ -91,12 +159,14 @@ public class MainMenuReportFragment extends Fragment {
         super.onStart();
 
         try {
-            FileInputStream inFs = getActivity().openFileInput("file.txt");
-            byte[] txt = new byte[9999];
 
-            inFs.read(txt);
 
-            String str = new String(txt);
+                FileInputStream inFs = getActivity().openFileInput("file.txt");
+                int fileSize = inFs.available();
+                byte[] txt = new byte[fileSize];
+
+                inFs.read(txt);
+                String str = new String(txt);
 
               String[] row = str.split("\n");
             dataAll= new String[row.length][];
@@ -122,6 +192,8 @@ public class MainMenuReportFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
+        textDataAll.setText("");
+
         for (int i=0; i < dataAll.length; i++){
             for (int j=0; j < dataAll[i].length;j++){
                 textDataAll.setText(textDataAll.getText() +","+ dataAll[i][j]);
@@ -132,8 +204,7 @@ public class MainMenuReportFragment extends Fragment {
 //        Bundle bundle = new Bundle();
 //        bundle.putStringArray("key", dataAll);
 
-//        MainMenuSearchFragment mainMenuSearchFragment = new MainMenuSearchFragment();
-//        mainMenuSearchFragment.setArguments(bundle);
+//
 
 
 

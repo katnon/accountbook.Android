@@ -54,12 +54,13 @@ public class MainActivity extends AppCompatActivity {
             } else if (itemId == R.id.menu_report) {
                 // menu_more에 대한 작업 수행
                 transaction.replace(R.id.menu_frame_layout, fragmentReport).commitAllowingStateLoss();
-//                        break;
-            } else if (itemId == R.id.menu_search) {
-                // menu_search에 대한 작업 수행
-                transaction.replace(R.id.menu_frame_layout, fragmentSearch).commitAllowingStateLoss();
-//                        break;
             }
+//                        break;
+//            } else if (itemId == R.id.menu_search) {
+//                // menu_search에 대한 작업 수행
+//                transaction.replace(R.id.menu_frame_layout, fragmentSearch).commitAllowingStateLoss();
+////                        break;
+//            }
 
             return true;
 

@@ -76,7 +76,7 @@ public class MainMenuInputFragment extends Fragment {
     int mDay = c.get(Calendar.DAY_OF_MONTH);
     int lineCount = 0;
 
-
+    int curTab = 1; //지출 탭 기본값
 
     /**
      * Use this factory method to create a new instance of
@@ -176,6 +176,8 @@ public class MainMenuInputFragment extends Fragment {
                         textValue.setText("수입 금액");
                         titleTextDate.setText("수입 일자");
                         textPayment.setText("수입 수단");
+                        textPayment.setHint("수입 수단");
+                        curTab = 0;
                         break;
                     case 1:
                         // 두 번째 탭이 선택되었을 때 실행할 코드를 여기에 작성합니다.
@@ -183,6 +185,8 @@ public class MainMenuInputFragment extends Fragment {
                         textValue.setText("지출 금액");
                         titleTextDate.setText("지출 일자");
                         textPayment.setText("지출 수단");
+                        textPayment.setHint("지출 수단");
+                        curTab = 1;
                         break;
                     // 필요한 만큼 case를 추가합니다.
                 }
@@ -228,15 +232,23 @@ public class MainMenuInputFragment extends Fragment {
                     try {
                         FileOutputStream outFs = requireContext().openFileOutput("file.txt", Context.MODE_APPEND);
 
+                        String str = "";
+                        //lineCount ++;
 
-
+                        if (curTab == 0)
+                        {
+                        str += "수입" + ",";
+                        }
+                        else if (curTab ==1)
+                        {
+                            str += "지출" + ",";
+                        }
 
                         //파일에 한 건당 한 줄씩 이어서 저장
-                        String str = Integer.toString(lineCount) + ",";
-                        lineCount ++;
+
                         str += editName.getText() + ",";
                         str += editValue.getText().toString().replaceAll("[^0-9]","") + ",";
-                        str += (Integer.toString(mYear)+"/"+Integer.toString(mMonth)+"/"+Integer.toString(mDay) + ",");
+                        str += (Integer.toString(mYear)+"년 "+String.format("%02d",(mMonth + 1))+"월 "+String.format("%02d",(mDay)) + "일,");
                         if (editPayment.getText().toString().equals(""))
                         {
                             editPayment.setText("없음");
@@ -251,7 +263,7 @@ public class MainMenuInputFragment extends Fragment {
                         outFs.write(str.getBytes());
                         outFs.close();
 
-                        Toast.makeText(requireContext(), "지출 내용이 저장되었습니다.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(requireContext(), "내용이 저장되었습니다.", Toast.LENGTH_SHORT).show();
                     } catch (IOException e) {
                     }
                 }
