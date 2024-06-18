@@ -4,15 +4,15 @@
     <item
         android:id="@+id/menu_home"
         android:title="홈"
-        android:icon="@drawable/ic_launcher_foreground"/>
+        android:icon="@drawable/home"/>
     <item
         android:id="@+id/menu_input"
         android:title="쓰기"
-        android:icon="@drawable/ic_launcher_foreground"/>
+        android:icon="@drawable/writing"/>
     <item
         android:id="@+id/menu_report"
         android:title="리포트"
-        android:icon="@drawable/ic_launcher_foreground"/>
+        android:icon="@drawable/report"/>
 <!--    <item-->
 <!--        android:id="@+id/menu_search"-->
 <!--        android:title="검색"-->

@@ -152,7 +152,7 @@ public class MainMenuInputFragment extends Fragment {
             }
             br.close();
         }catch (IOException e){}
-        Toast.makeText(requireContext(), "line 수: " + lineCount, Toast.LENGTH_SHORT).show();
+
 
 
         TabLayout tabLayoutIP = (TabLayout) rootView.findViewById(R.id.tabLayoutIP);
